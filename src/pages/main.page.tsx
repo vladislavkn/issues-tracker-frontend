@@ -22,11 +22,18 @@ export function MainPage() {
       }
     >
       <Heading paddingBottom={8}>Submit an issue</Heading>
-      <VStack spacing={4} width="100%" align="flex-start">
-        <Input placeholder="Your first name" />
-        <Input placeholder="Your last name" />
-        <Input placeholder="Your email" />
-        <Textarea rows={10} placeholder="Your message" />
+      <VStack spacing={8} width="100%" align="flex-start">
+        <VStack spacing={4} width="100%" align="flex-start">
+          <Heading size="sm">Personal information</Heading>
+          <Input placeholder="Your first name" />
+          <Input placeholder="Your last name" />
+          <Input placeholder="Your email" />
+        </VStack>
+        <VStack spacing={4} width="100%" align="flex-start">
+          <Heading size="sm">Issue information</Heading>
+          <Input placeholder="Subject" />
+          <Textarea rows={10} placeholder="Your message" />
+        </VStack>
         <ReCAPTCHA
           sitekey={import.meta.env.VITE_SITE_KEY}
           onChange={console.log}
