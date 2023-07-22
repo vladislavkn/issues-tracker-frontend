@@ -13,7 +13,7 @@ import { FormCaptcha } from "./form-captcha";
 import ReCAPTCHA from "react-google-recaptcha";
 
 type IssueCreateFormProps = {
-  onSubmit: (dto: CreateIssueDto) => void;
+  onSubmit: (dto: CreateIssueDto, captchaResponse: string) => Promise<boolean>;
 };
 
 type Inputs = CreateIssueDto & { captcha: null | string };
@@ -29,13 +29,16 @@ export const CreateIssueForm: FC<IssueCreateFormProps> = ({ onSubmit }) => {
 
   const captchaRef = useRef<ReCAPTCHA>(null);
 
-  const onSubmitWithFieldsReset = (values: Inputs) => {
-    for (const key in values) {
-      resetField(key as keyof Inputs);
-    }
-    captchaRef.current?.reset();
+  const onSubmitWithFieldsReset = async (values: Inputs) => {
+    const createIssueDto = new CreateIssueDto(values);
+    const shouldReset = await onSubmit(createIssueDto, values.captcha!);
 
-    onSubmit(values);
+    if (shouldReset) {
+      for (const key in values) {
+        resetField(key as keyof Inputs);
+      }
+      captchaRef.current?.reset();
+    }
   };
 
   return (
