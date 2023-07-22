@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { CreateIssueDto } from "../dto/create-issue.dto";
 import { useForm } from "react-hook-form";
 import {
@@ -10,6 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FormCaptcha } from "./form-captcha";
+import ReCAPTCHA from "react-google-recaptcha";
 
 type IssueCreateFormProps = {
   onSubmit: (dto: CreateIssueDto) => void;
@@ -23,12 +24,24 @@ export const CreateIssueForm: FC<IssueCreateFormProps> = ({ onSubmit }) => {
     handleSubmit,
     control,
     formState: { errors },
+    resetField,
   } = useForm<Inputs>();
+
+  const captchaRef = useRef<ReCAPTCHA>(null);
+
+  const onSubmitWithFieldsReset = (values: Inputs) => {
+    for (const key in values) {
+      resetField(key as keyof Inputs);
+    }
+    captchaRef.current?.reset();
+
+    onSubmit(values);
+  };
 
   return (
     <VStack
       as="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmitWithFieldsReset)}
       spacing={8}
       width="100%"
       align="flex-start"
@@ -70,7 +83,7 @@ export const CreateIssueForm: FC<IssueCreateFormProps> = ({ onSubmit }) => {
           {...register("body", { required: true })}
         />
       </VStack>
-      <FormCaptcha control={control} name="captcha" />
+      <FormCaptcha control={control} name="captcha" ref={captchaRef} />
       <Box display="flex" justifyContent="flex-end" width="100%">
         <Button type="submit" variant="solid" colorScheme="teal">
           Submit

@@ -1,4 +1,5 @@
 import { Center, Tooltip } from "@chakra-ui/react";
+import { ReactElement, Ref, forwardRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
@@ -7,10 +8,10 @@ type FormCaptchaProps<T extends FieldValues> = {
   name: Path<T>;
 };
 
-export function FormCaptcha<T extends FieldValues>({
-  control,
-  name,
-}: FormCaptchaProps<T>) {
+function FormCaptchaInternal<T extends FieldValues>(
+  { control, name }: FormCaptchaProps<T>,
+  ref?: Ref<ReCAPTCHA>
+) {
   return (
     <Controller
       rules={{ required: true }}
@@ -32,6 +33,7 @@ export function FormCaptcha<T extends FieldValues>({
             borderRadius="md"
           >
             <ReCAPTCHA
+              ref={ref}
               onBlur={onBlur}
               sitekey={import.meta.env.VITE_SITE_KEY}
               onChange={(token) => onChange({ target: { value: token } })}
@@ -42,3 +44,9 @@ export function FormCaptcha<T extends FieldValues>({
     />
   );
 }
+
+export const FormCaptcha = forwardRef(FormCaptchaInternal) as <
+  T extends FieldValues
+>(
+  p: FormCaptchaProps<T> & { ref?: Ref<ReCAPTCHA> }
+) => ReactElement; // FormCaptcha<T extends FieldValues>
