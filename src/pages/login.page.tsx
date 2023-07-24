@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { DefaultLayout } from "../layouts/default.layout";
 import { Box, Button, useToast } from "@chakra-ui/react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import { useAuth } from "../auth/use-auth";
 
 export const LoginPage: FC = () => {
   const toast = useToast();
-  const { setAuth } = useAuth();
+  const { setAuth, userEmail } = useAuth();
 
   const handleLogin = async (loginDto: LoginDto) => {
     try {
@@ -19,7 +19,6 @@ export const LoginPage: FC = () => {
         throw new Error("Login failed");
       }
       setAuth(accessToken);
-      redirectOnLoginSuccess();
     } catch (e) {
       console.error(e);
       toast({
@@ -33,14 +32,16 @@ export const LoginPage: FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const redirectOnLoginSuccess = () => {
-    let redirectUrl = searchParams.get("redirect");
-    if (!redirectUrl) {
-      redirectUrl = "/dashboard";
-    }
+  useEffect(() => {
+    if (userEmail) {
+      let redirectUrl = searchParams.get("redirect");
+      if (!redirectUrl) {
+        redirectUrl = "/dashboard";
+      }
 
-    navigate(redirectUrl);
-  };
+      navigate(redirectUrl);
+    }
+  }, [userEmail]);
 
   return (
     <DefaultLayout
