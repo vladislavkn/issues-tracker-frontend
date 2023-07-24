@@ -1,6 +1,7 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import { MainPage } from "./pages/main.page";
 import { AuthGuard } from "./auth/auth-guard";
+import { LoginPage } from "./pages/login.page";
 
 export const router = createBrowserRouter([
   {
@@ -9,7 +10,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "login",
-    element: <div>Login page</div>,
+    element: <LoginPage />,
   },
   {
     path: "dashboard/",
