@@ -1,6 +1,7 @@
 import { FC, ReactNode, useCallback, useMemo, useState } from "react";
 import { authContext } from "./auth-context";
 import { decodeJWT } from "./decode-jwt";
+import { setAccessTokenToHttpClient } from "../api/api-client";
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -14,6 +15,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const { email } = decodeJWT<{ email: string }>(token);
     setUserEmail(email);
     setToken(token);
+    setAccessTokenToHttpClient(token);
   }, []);
 
   const contextValue = useMemo(

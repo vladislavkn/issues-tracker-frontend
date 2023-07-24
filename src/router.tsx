@@ -3,6 +3,7 @@ import { MainPage } from "./pages/main.page";
 import { AuthGuard } from "./auth/auth-guard";
 import { LoginPage } from "./pages/login.page";
 import { DashboardPage } from "./pages/dashboard.page";
+import { IssuesPage } from "./pages/issues.page";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <div>Display all issues</div>,
+        element: <IssuesPage />,
       },
       {
         path: "accounts",
