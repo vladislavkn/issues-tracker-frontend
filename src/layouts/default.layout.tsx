@@ -1,14 +1,16 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 
 type DefaultLayoutProps = {
   children: ReactNode;
   navigation?: ReactNode;
+  heading: string;
 };
 
 export const DefaultLayout: FC<DefaultLayoutProps> = ({
   children,
   navigation,
+  heading,
 }) => {
   return (
     <>
@@ -16,6 +18,7 @@ export const DefaultLayout: FC<DefaultLayoutProps> = ({
         {navigation}
       </Box>
       <Container maxW="xl" paddingBottom={4} as="main">
+        <Heading paddingBottom={8}>{heading}</Heading>
         {children}
       </Container>
     </>

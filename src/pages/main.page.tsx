@@ -39,6 +39,7 @@ export function MainPage() {
 
   return (
     <DefaultLayout
+      heading="Submit an issue"
       navigation={
         <Box display="flex" justifyContent="flex-end">
           <Link to="/dashboard">
@@ -47,7 +48,6 @@ export function MainPage() {
         </Box>
       }
     >
-      <Heading paddingBottom={8}>Submit an issue</Heading>
       <CreateIssueForm onSubmit={handleSubmitIssue} />
     </DefaultLayout>
   );

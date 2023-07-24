@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export const LoginPage: FC = () => {
   return (
     <DefaultLayout
+      heading="Login"
       navigation={
         <Box display="flex" justifyContent="flex-end">
           <Link to="/">
@@ -14,7 +15,6 @@ export const LoginPage: FC = () => {
         </Box>
       }
     >
-      <Heading paddingBottom={8}>Login</Heading>
       <VStack as="form" spacing={8} width="100%" align="flex-start">
         <VStack spacing={4} width="100%" align="flex-start">
           <Input placeholder="Email" />
