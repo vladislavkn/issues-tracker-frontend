@@ -1,9 +1,47 @@
 import { FC } from "react";
 import { DefaultLayout } from "../layouts/default.layout";
-import { Box, Button, Heading, Input, VStack } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Box, Button, useToast } from "@chakra-ui/react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { LoginForm } from "../components/login-form";
+import { login } from "../api/login.api";
+import { LoginDto } from "../dto/login.dto";
+import { useAuth } from "../auth/use-auth";
 
 export const LoginPage: FC = () => {
+  const toast = useToast();
+  const { setAuth } = useAuth();
+
+  const handleLogin = async (loginDto: LoginDto) => {
+    try {
+      const loginResponse = await login(loginDto);
+      const accessToken = loginResponse.data.accessToken;
+      if (loginResponse.status !== 200 || !accessToken) {
+        throw new Error("Login failed");
+      }
+      setAuth(accessToken);
+      redirectOnLoginSuccess();
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: "Some error occured",
+        status: "error",
+        duration: 9000,
+      });
+    }
+  };
+
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const redirectOnLoginSuccess = () => {
+    let redirectUrl = searchParams.get("redirect");
+    if (!redirectUrl) {
+      redirectUrl = "/dashboard";
+    }
+
+    navigate(redirectUrl);
+  };
+
   return (
     <DefaultLayout
       heading="Login"
@@ -15,17 +53,7 @@ export const LoginPage: FC = () => {
         </Box>
       }
     >
-      <VStack as="form" spacing={8} width="100%" align="flex-start">
-        <VStack spacing={4} width="100%" align="flex-start">
-          <Input placeholder="Email" />
-          <Input placeholder="Password" />
-        </VStack>
-        <Box display="flex" justifyContent="flex-end" width="100%">
-          <Button type="submit" variant="solid" colorScheme="teal">
-            Submit
-          </Button>
-        </Box>
-      </VStack>
+      <LoginForm onSubmit={handleLogin} />
     </DefaultLayout>
   );
 };
