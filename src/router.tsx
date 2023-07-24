@@ -1,5 +1,6 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import { MainPage } from "./pages/main.page";
+import { AuthGuard } from "./auth/auth-guard";
 
 export const router = createBrowserRouter([
   {
@@ -13,9 +14,9 @@ export const router = createBrowserRouter([
   {
     path: "dashboard/",
     element: (
-      <div>
+      <AuthGuard>
         Dashboard page <Outlet />
-      </div>
+      </AuthGuard>
     ),
     children: [
       {
