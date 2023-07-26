@@ -3,6 +3,7 @@ import { IssueDto } from "../dto/issue.dto";
 import { Heading, HStack } from "@chakra-ui/react";
 import { formatDate } from "../utils/formatDate";
 import { Tile } from "./tile";
+import { IssueStatusIcon } from "./issue-status-icon";
 
 type IssueDetailsProps = {
   issue: IssueDto;
@@ -33,6 +34,7 @@ export const IssueDetails: FC<IssueDetailsProps> = ({ issue }) => {
         <Tile label="Id">{issue.id}</Tile>
         <Tile label="Date Created">{formatDate(issue.dateCreated)}</Tile>
         <Tile label="Last updated">{formatDate(issue.dateUpdated)}</Tile>
+        <Tile label="Satisfied">{issue.satisfied.toString()}</Tile>
       </HStack>
     </>
   );

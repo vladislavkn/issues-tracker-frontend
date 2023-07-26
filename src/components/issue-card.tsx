@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { IssueDto } from "../dto/issue.dto";
-import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardHeader,
@@ -13,6 +12,7 @@ import {
   LinkOverlay,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { IssueStatusIcon } from "./issue-status-icon";
 
 type IssueCardProps = {
   issue: IssueDto;
@@ -24,11 +24,7 @@ export const IssueCard: FC<IssueCardProps> = ({ issue }) => {
       <Card>
         <CardHeader pb={2}>
           <HStack alignItems="center" gap={2}>
-            {issue.satisfied ? (
-              <CheckCircleIcon color="green" />
-            ) : (
-              <WarningIcon color="orange" />
-            )}
+            <IssueStatusIcon satisfied={issue.satisfied} />
             <LinkOverlay as={Link} to={`/dashboard/${issue.id}`}>
               <Heading size="xs">{issue.subject}</Heading>
             </LinkOverlay>
