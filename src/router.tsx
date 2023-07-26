@@ -1,9 +1,11 @@
-import { Outlet, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { MainPage } from "./pages/main.page";
 import { AuthGuard } from "./auth/auth-guard";
 import { LoginPage } from "./pages/login.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { IssuesPage } from "./pages/issues.page";
+import { getOneIssueById } from "./api/get-one-issue-by-id";
+import { IssuePage } from "./pages/issue.page";
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +34,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ":id",
-        element: <div>Display the issue with received id</div>,
+        element: <IssuePage />,
+        loader: async ({ params }) => {
+          const issueResponse = await getOneIssueById(params.id!);
+          return issueResponse.data;
+        },
       },
     ],
   },
