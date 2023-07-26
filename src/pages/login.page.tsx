@@ -6,10 +6,11 @@ import { LoginForm } from "../components/login-form";
 import { login } from "../api/login.api";
 import { LoginDto } from "../dto/login.dto";
 import { useAuth } from "../auth/use-auth";
+import { authEvent, authEventBus } from "../auth/auth-event-bus";
 
 export const LoginPage: FC = () => {
   const toast = useToast();
-  const { setAuth, userEmail } = useAuth();
+  const { userEmail } = useAuth();
 
   const handleLogin = async (loginDto: LoginDto) => {
     try {
@@ -18,7 +19,7 @@ export const LoginPage: FC = () => {
       if (loginResponse.status !== 200 || !accessToken) {
         throw new Error("Login failed");
       }
-      setAuth(accessToken);
+      authEventBus.emit(authEvent.LOGIN, accessToken);
     } catch (e) {
       console.error(e);
       toast({
