@@ -2,16 +2,13 @@ import { FC, useEffect, useState } from "react";
 import { IssueDto } from "../dto/issue.dto";
 import { getAllIssues } from "../api/get-all-issues.api";
 import { Heading } from "@chakra-ui/react";
-import { useSearchParams } from "react-router-dom";
 import { IssuesList } from "../components/issues-list";
 import { Pagination } from "../components/pagination";
+import { usePaginationParams } from "../hooks/use-pagination-params.hook";
 
 export const IssuesPage: FC = () => {
   const [issues, setIssues] = useState<IssueDto[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const skip = parseInt(searchParams.get("skip") ?? "0");
-  const take = parseInt(searchParams.get("take") ?? "12");
+  const { skip, take, setPaginationParam } = usePaginationParams();
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -22,17 +19,10 @@ export const IssuesPage: FC = () => {
     fetchIssues();
   }, [skip, take]);
 
-  const showNextPage = () =>
-    setSearchParams((params) => {
-      params.set("skip", (skip + take).toString());
-      return params;
-    });
+  const showNextPage = () => setPaginationParam("skip", skip + take);
 
   const showPrevPage = () =>
-    setSearchParams((params) => {
-      params.set("skip", Math.max(skip - take, 0).toString());
-      return params;
-    });
+    setPaginationParam("skip", Math.max(skip - take, 0));
 
   return (
     <>
