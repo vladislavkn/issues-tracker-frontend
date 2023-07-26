@@ -1,20 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { IssueDto } from "../dto/issue.dto";
 import { getAllIssues } from "../api/get-all-issues.api";
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  HStack,
-  Heading,
-  SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
-import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import { Heading } from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
+import { IssuesList } from "../components/issues-list";
+import { Pagination } from "../components/pagination";
 
 export const IssuesPage: FC = () => {
   const [issues, setIssues] = useState<IssueDto[]>([]);
@@ -47,38 +37,13 @@ export const IssuesPage: FC = () => {
   return (
     <>
       <Heading pb={8}>All issues</Heading>
-      <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
-        {issues.map((issue) => (
-          <Card key={issue.id}>
-            <CardHeader pb={2}>
-              <HStack alignItems="center" gap={2}>
-                {issue.satisfied ? (
-                  <CheckCircleIcon color="green" />
-                ) : (
-                  <WarningIcon color="orange" />
-                )}
-                <Heading size="xs">{issue.subject}</Heading>
-              </HStack>
-            </CardHeader>
-            <CardBody py={0}>
-              <Text fontSize="md" noOfLines={2}>
-                {issue.body}
-              </Text>
-            </CardBody>
-            <CardFooter>
-              <Text fontSize="xs">
-                {new Date(issue.dateCreated).toLocaleDateString("de")}
-              </Text>
-            </CardFooter>
-          </Card>
-        ))}
-      </SimpleGrid>
-      <HStack justifyContent="flex-end">
-        <HStack gap={4} align="center">
-          <Button onClick={showPrevPage}>Prev page</Button>
-          <Button onClick={showNextPage}>Next page</Button>
-        </HStack>
-      </HStack>
+      <IssuesList issues={issues} />
+      <Pagination
+        hasPrev={skip !== 0}
+        hasNext={true}
+        onPrev={showPrevPage}
+        onNext={showNextPage}
+      />
     </>
   );
 };
